@@ -2,7 +2,7 @@
 	
 	
 */
-MsgC(Color(200, 55, 55), "[E2+] ") MsgN"e2life.lua"
+MsgC(Color(200, 55, 55), "[E2+] ") MsgC(Color(200, 200, 200), "e2life.lua\n")
 
 e2life = e2life or {}
 
