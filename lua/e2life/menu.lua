@@ -1,11 +1,8 @@
-/*==================
-	Control menu
-===================*/
 local SetDrawColor = surface.SetDrawColor
 local DrawRect = surface.DrawRect
 local DrawTexturedRect = surface.DrawTexturedRect
 
-e2life.menu = e2life.menu or {}
+E2Life.menu = E2Life.menu or {}
 
 local Colors = {
 	main = Color(70, 70, 70),
@@ -17,12 +14,10 @@ local Fonts = {
 }
 
 local function BuildMenu(panel)
-	if not e2life.menu.RootPanel then e2life.menu.RootPanel = panel end
+	if not E2Life.menu.RootPanel then E2Life.menu.RootPanel = panel end
 	panel:ClearControls()
 	
-	/*=== 
-		Paint def panel
-	===*/
+	// Paint functions
 	panel.PaintOver = function(p, w, h) 
 		SetDrawColor(Colors.main)
 		DrawRect(0, 0, w, 17)
@@ -35,9 +30,7 @@ local function BuildMenu(panel)
 		DrawTexturedRect(0, 17, w, math.min(h - 16, 7))
 	end
 	
-	/*===
-		Controls
-	===*/
+	// Controls
 	local function AddCrossLine(color, h)
 		local CrosLine=vgui.Create('DPanel')
 			CrosLine:SetTall(h or 2)
@@ -53,31 +46,23 @@ local function BuildMenu(panel)
 end
 
 local function RebuildMenu()
-	if e2life.menu.RootPanel then
-		BuildMenu(e2life.menu.RootPanel)
+	if E2Life.menu.RootPanel then
+		BuildMenu(E2Life.menu.RootPanel)
 	end
 end
 
-function e2life.UpdateMenu()
-	
-end
+hook.Add("SpawnMenuOpen", "E2L.SpawnMenuOpen", RebuildMenu)
 
-/*===
-	Hooks
-===*/
-hook.Add("SpawnMenuOpen", "E2L_SMO", RebuildMenu)--e2life.UpdateMenu)
-
-hook.Add("PopulateToolMenu", "E2L_PTM", function()
-	spawnmenu.AddToolMenuOption("Utilities", "E2Life", "E2Life control menu", "Settings", "", "", BuildMenu)
+hook.Add("PopulateToolMenu", "E2L.PopulateToolMenu", function()
+	spawnmenu.AddToolMenuOption("Utilities", "E2Life", "E2Life control menu", "Admin", "", "", BuildMenu)
 end)
 
-/*===
-	For ULX
-===*/
+// Usergroup change events
+
 for name, _ in pairs(hook.GetTable()) do
 	if name == "UCLChanged" then
-		hook.Add("UCLChanged", "E2L_UCLC", e2life.UpdateMenu)
-		e2life.ULX = true
+		hook.Add("UCLChanged", "E2L_UCLC", E2Life.UpdateMenu)
+		E2Life.ULX = true
 		break
 	end
 end
